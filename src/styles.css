@@ -1,0 +1,378 @@
+/* ======================================================
+   GLOBAL STYLES (applies to all pages)
+====================================================== */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f4f6f9;
+}
+
+/* Buttons */
+.button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  background: #ddd;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.button.primary {
+  background: #007bff;
+  color: white;
+}
+
+.button.preview {
+  background: #e0e0e0;
+  color: black;
+}
+
+.button.danger {
+  background: #dc3545;
+  color: white;
+}
+
+.button.small {
+  padding: 4px 8px;
+  font-size: 0.85rem;
+}
+
+/* Inputs */
+.input {
+  width: 100%;
+  padding: 6px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.title-input {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Badge for submissions count */
+.badge {
+  background: #d0e7ff;   
+  color: #004a99;       
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-left: 0;        
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* ======================================================
+   LAYOUT + SIDEBAR (applies to all pages)
+====================================================== */
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 220px;
+  background: #ffffff; /* white background */
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-right: 1px solid #e0e0e0;
+}
+
+.sidebar-header {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.sidebar-header + hr {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin-bottom: 15px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  margin-bottom: 10px;
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #555;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.sidebar a .icon {
+  font-size: 1.2rem;
+}
+
+.sidebar a:hover {
+  background-color: #e6f0ff; /* light blue background on hover */
+  color: #007bff; /* blue text/icon on hover */
+}
+
+.sidebar li.active a {
+  background-color: #e6f0ff; /* light blue background for selected */
+  color: #007bff;            /* blue text/icon for selected */
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+
+/* ======================================================
+   FORMS LIST PAGE (list of created forms)
+====================================================== */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 15px;
+}
+
+.form-card {
+  background: white;
+  padding: 15px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+
+/* ======================================================
+   CREATE FORM PAGE (form builder)
+====================================================== */
+/* Layout */
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Content */
+.content {
+  flex: 1;
+  padding: 20px;
+  background: #f4f6f9;
+  color: #333;
+}
+
+/* Header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.page-header h1 {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+/* Buttons */
+.button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #f1f1f1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.button.primary {
+  background: #007bff;
+  color: white;
+}
+
+.button.primary:hover {
+  background: #005fcc;
+}
+
+/* Inputs */
+.input {
+  width: 100%;
+  padding: 8px;
+  margin: 4px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.title-input {
+  font-size: 1.1rem;
+  font-weight: 500;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 4px;
+}
+
+/* Toolbar for adding fields */
+.toolbar {
+  margin: 20px 0;
+}
+
+.toolbar h2 {
+  margin-bottom: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Toolbar buttons container - two columns */
+.toolbar-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 columns */
+  gap: 10px; /* spacing between buttons */
+  margin-top: 0.5rem;
+}
+
+/* Buttons inside toolbar */
+.toolbar-buttons .button {
+  width: 100%; /* full width of each column */
+  justify-content: center;
+  padding: 8px 12px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toolbar-buttons .button:hover {
+  background: #f1f5ff;
+  border-color: #007bff;
+  color: #007bff;
+}
+
+/* Responsive: one column on small screens */
+@media (max-width: 600px) {
+  .toolbar-buttons {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Field Cards */
+.field-card {
+  background: white;
+  padding: 15px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.field-card label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.field-label {
+  display: flex;
+  align-items: center;
+  gap: 6px; /* spacing between label and badge */
+}
+
+.field-badge {
+  background-color: #e0e0e0; /* light gray background */
+  color: #555;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 0.65rem;
+  text-transform: lowercase;
+  font-weight: 500;
+}
+
+
+/* Field actions */
+.field-card .flex {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.field-card .flex button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.field-card .flex button:hover {
+  color: #007bff;
+}
+
+/* Option rows (for radio/checkbox fields) */
+.option-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.option-row input {
+  flex: 1;
+}
+
+.option-row button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #dc3545;
+}
+
+.option-row button:hover {
+  color: #a40014;
+}
+
+/* Required field checkbox */
+.field-card label input[type="checkbox"] {
+  margin-right: 6px;
+}
+
