@@ -1,16 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 
 export default function FormsPage() {
-  const [forms, setForms] = useState([
-    { id: 1, title: "Contact Form", submissions: 24 },
-    { id: 2, title: "Event Registration", submissions: 156 },
-    { id: 3, title: "Product Feedback", submissions: 8 }
-  ]);
+  const [forms, setForms] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const handleDelete = (id) => {
-    setForms(forms.filter(f => f.id !== id));
+  useEffect(() => {
+    fetchForms();
+  }, []);
+
+  const fetchForms = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/api/forms');
+      if (!response.ok) {
+        throw new Error('Failed to fetch forms');
+      }
+      const data = await response.json();
+      setForms(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this form?')) {
+      return;
+    }
+    
+    try {
+      const response = await fetch(`http://localhost:8000/api/forms/${id}`, {
+        method: 'DELETE'
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to delete form');
+      }
+      
+      // Refresh the forms list
+      await fetchForms();
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   return (
@@ -25,27 +59,34 @@ export default function FormsPage() {
           <Link to="/forms/create" className="button primary">+ Create Form</Link>
         </header>
 
-        <div className="form-grid">
-          {forms.map(form => (
-            <div className="form-card">
-            <h2>{form.title}</h2>
-
-            <div className="actions">
-              <Link to={`/forms/${form.id}/edit`} className="button primary">Edit</Link>
-
-              <button className="button preview">
-                👁 Preview
-              </button>
-
-              <span className="badge">{form.submissions}</span>
-
-              <button onClick={() => handleDelete(form.id)} className="button danger">
-                🗑
-              </button>
-            </div>
-          </div>    
-          ))}
-        </div>
+        {loading ? (
+          <div className="loading">Loading forms...</div>
+        ) : error ? (
+          <div className="error">{error}</div>
+        ) : forms.length === 0 ? (
+          <div className="empty-state">
+            <p>No forms created yet.</p>
+            <Link to="/forms/create" className="button primary">Create your first form</Link>
+          </div>
+        ) : (
+          <div className="form-grid">
+            {forms.map(form => (
+              <div key={form.id} className="form-card">
+                <h2>{form.title}</h2>
+                <p className="field-count">{form.fields?.length || 0} fields</p>
+                <div className="actions">
+                  <Link to={`/forms/${form.id}/edit`} className="button primary">Edit</Link>
+                  <button className="button preview">
+                    👁 Preview
+                  </button>
+                  <button onClick={() => handleDelete(form.id)} className="button danger">
+                    🗑
+                  </button>
+                </div>
+              </div>    
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );

@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function FieldEditor({ field, onUpdate, onDelete, onDuplicate, onMoveUp, onMoveDown }) {
   const [data, setData] = useState(field);
+
+  useEffect(() => {
+    setData(field); // update if field prop changes
+  }, [field]);
 
   const update = (changes) => {
     const updated = { ...data, ...changes };
@@ -12,18 +16,15 @@ export default function FieldEditor({ field, onUpdate, onDelete, onDuplicate, on
   return (
     <div className="field-card border rounded p-4 mb-3 bg-gray-50">
       <div className="flex justify-between items-center mb-2">
-            <div className="field-label flex items-center gap-2">
-            <span className="text-sm font-medium capitalize">
-                {field.type === "text"
-                ? "Text Input"
-                : field.type === "textarea"
-                ? "Text Area"
-                : field.type === "checkbox"
-                ? "Checkbox"
-                : "Radio Button"}
-            </span>
-            <span className="field-badge text-xs">{field.type}</span>
-            </div>
+        <div className="field-label flex items-center gap-2">
+          <span className="text-sm font-medium capitalize">
+            {data.type === "text" ? "Text Input"
+              : data.type === "textarea" ? "Text Area"
+              : data.type === "checkbox" ? "Checkbox"
+              : "Radio Button"}
+          </span>
+          <span className="field-badge text-xs px-1 bg-gray-200 rounded">{data.type}</span>
+        </div>
 
         <div className="flex gap-2">
           <button onClick={onMoveUp}>↑</button>
@@ -42,7 +43,7 @@ export default function FieldEditor({ field, onUpdate, onDelete, onDuplicate, on
         className="input w-full mb-2"
       />
 
-      {/* Options (for checkbox/radio) */}
+      {/* Options */}
       {(data.type === "checkbox" || data.type === "radio") && (
         <div className="mb-2">
           <label className="block mb-1">Options</label>
