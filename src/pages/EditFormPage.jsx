@@ -125,77 +125,51 @@ export default function EditFormPage() {
     });
   };
 
-  const saveForm = async () => {
-    setSaving(true);
-    setError(null);
+const saveForm = async () => {
+  setSaving(true);
+  setError(null);
 
-    try {
-      validateForm();
+  try {
+    validateForm();
 
-      const formattedFields = fields.map((field, index) => {
-        const formatted = {
-          type: field.type,
-          label: field.label,
-          required: field.required || false,
-          order: index,
-        };
+    const formattedFields = fields.map((field, index) => ({
+      type: field.type,
+      label: field.label,
+      required: field.required || false,
+      order: index,
+      options: ["checkbox", "radio"].includes(field.type)
+        ? Array.isArray(field.options) ? field.options : []
+        : [],
+    }));
 
-        if (["checkbox", "radio"].includes(field.type)) {
-          formatted.options = Array.isArray(field.options)
-            ? field.options
-            : [];
-        } else {
-          formatted.options = [];
-        }
+    const response = await fetch(`http://127.0.0.1:8000/api/forms/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ title, fields: formattedFields }),
+    });
 
-        return formatted;
-      });
-
-      console.log("Sending fields:", formattedFields); // Debug log
-
-      const response = await fetch(`http://127.0.0.1:8000/api/forms/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          title,
-          fields: formattedFields,
-        }),
-      });
-
-      const data = await response.json();
-      console.log("Server response:", data); // Debug log
-
-      if (!response.ok) {
-        if (response.status === 422) {
-          const errors = Object.values(data.errors || {}).flat();
-          throw new Error(errors.join("\n"));
-        }
-        throw new Error(data.message || "Failed to update form");
+    const data = await response.json();
+    if (!response.ok) {
+      if (response.status === 422) {
+        const errors = Object.values(data.errors || {}).flat();
+        throw new Error(errors.join("\n"));
       }
-
-      // ✅ Always refresh with server response
-      if (data.form) {
-        const updatedFields = data.form.fields.map((field) => ({
-          ...field,
-          id: field.id.toString(),
-          options: Array.isArray(field.options) ? field.options : [],
-        }));
-
-        setTitle(data.form.title);
-        setFields(updatedFields);
-      }
-
-      alert("Form updated successfully!");
-    } catch (err) {
-      setError(err.message);
-      alert("Error: " + err.message);
-    } finally {
-      setSaving(false);
+      throw new Error(data.message || "Failed to update form");
     }
-  };
+
+    alert("Form updated successfully!");
+    navigate("/forms"); // ✅ redirect after success
+  } catch (err) {
+    setError(err.message);
+    alert("Error: " + err.message);
+  } finally {
+    setSaving(false);
+  }
+};
+
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;

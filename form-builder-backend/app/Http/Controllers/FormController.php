@@ -80,40 +80,22 @@ class FormController extends Controller
             // Update form title
             $form->update(['title' => $request->title]);
 
-            $existingIds = $form->fields()->pluck('id')->toArray();
-            $submittedIds = [];
+            $submittedFieldIds = collect($request->fields)->pluck('id')->filter()->toArray();
 
-            foreach ($request->fields as $index => $field) {
-                if (!empty($field['id'])) {
-                    // Update existing field
-                    $formField = $form->fields()->find($field['id']);
-                    if ($formField) {
-                        $formField->update([
-                            'type' => $field['type'],
-                            'label' => $field['label'],
-                            'required' => (bool) ($field['required'] ?? false),
-                            'options' => in_array($field['type'], ['checkbox', 'radio']) ? ($field['options'] ?? []) : [],
-                            'order' => $index,
-                        ]);
-                        $submittedIds[] = $formField->id;
-                    }
-                } else {
-                    // Create new field
-                    $newField = $form->fields()->create([
-                        'type' => $field['type'],
-                        'label' => $field['label'],
-                        'required' => (bool) ($field['required'] ?? false),
-                        'options' => in_array($field['type'], ['checkbox', 'radio']) ? ($field['options'] ?? []) : [],
+            // Delete fields that are not in the submission
+            $form->fields()->whereNotIn('id', $submittedFieldIds)->delete();
+
+            foreach ($request->fields as $index => $fieldData) {
+                $form->fields()->updateOrCreate(
+                    ['id' => $fieldData['id'] ?? null],
+                    [
+                        'type' => $fieldData['type'],
+                        'label' => $fieldData['label'],
+                        'required' => $fieldData['required'] ?? false,
+                        'options' => in_array($fieldData['type'], ['checkbox', 'radio']) ? ($fieldData['options'] ?? []) : [],
                         'order' => $index,
-                    ]);
-                    $submittedIds[] = $newField->id;
-                }
-            }
-
-            // Delete removed fields
-            $fieldsToDelete = array_diff($existingIds, $submittedIds);
-            if (!empty($fieldsToDelete)) {
-                $form->fields()->whereIn('id', $fieldsToDelete)->delete();
+                    ]
+                );
             }
 
             DB::commit();
