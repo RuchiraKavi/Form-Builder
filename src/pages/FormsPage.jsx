@@ -13,7 +13,7 @@ export default function FormsPage() {
 
   const fetchForms = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/forms');
+      const response = await fetch('http://127.0.0.1:8000/api/forms');
       if (!response.ok) {
         throw new Error('Failed to fetch forms');
       }
@@ -32,7 +32,7 @@ export default function FormsPage() {
     }
     
     try {
-      const response = await fetch(`http://localhost:8000/api/forms/${id}`, {
+      const response = await fetch(`http://127.0.0.1:8000/api/forms/${id}`, {
         method: 'DELETE'
       });
       

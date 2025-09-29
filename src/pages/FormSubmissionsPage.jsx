@@ -27,7 +27,7 @@ export default function FormSubmissionsPage() {
 
   const fetchSubmissions = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/submissions');
+      const response = await fetch('http://127.0.0.1:8000/api/submissions');
       if (!response.ok) {
         throw new Error('Failed to fetch submissions');
       }

@@ -15,7 +15,7 @@ export default function EditFormPage() {
   // ✅ useCallback ensures fetchForm is stable (no ESLint warning)
   const fetchForm = useCallback(async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/forms/${id}`);
+      const response = await fetch(`http://127.0.0.1:8000/api/forms/${id}`);
       if (!response.ok) throw new Error("Failed to fetch form");
       const data = await response.json();
 
@@ -153,7 +153,7 @@ export default function EditFormPage() {
 
       console.log("Sending fields:", formattedFields); // Debug log
 
-      const response = await fetch(`http://localhost:8000/api/forms/${id}`, {
+      const response = await fetch(`http://127.0.0.1:8000/api/forms/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

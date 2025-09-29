@@ -57,7 +57,7 @@ export default function CreateFormPage() {
     setErrors({});
 
     try {
-      const res = await fetch("http://localhost:8000/api/forms", {
+      const res = await fetch("http://127.0.0.1:8000/api/forms", {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
