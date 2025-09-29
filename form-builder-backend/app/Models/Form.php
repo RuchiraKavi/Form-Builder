@@ -12,4 +12,9 @@ class Form extends Model
     {
         return $this->hasMany(FormField::class)->orderBy('order');
     }
+
+    public function submissions()
+    {
+        return $this->hasMany(FormSubmission::class);
+    }
 }

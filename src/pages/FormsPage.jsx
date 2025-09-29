@@ -76,9 +76,9 @@ export default function FormsPage() {
                 <p className="field-count">{form.fields?.length || 0} fields</p>
                 <div className="actions">
                   <Link to={`/forms/${form.id}/edit`} className="button primary">Edit</Link>
-                  <button className="button preview">
+                  <Link to={`/forms/${form.id}/preview`} className="button preview">
                     👁 Preview
-                  </button>
+                  </Link>
                   <button onClick={() => handleDelete(form.id)} className="button danger">
                     🗑
                   </button>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import FieldEditor from "../components/FieldEditor";
 import Sidebar from "../components/Sidebar";
 
@@ -7,6 +8,7 @@ export default function CreateFormPage() {
   const [fields, setFields] = useState([]);
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
+  const navigate = useNavigate();
 
   // --- Field Management ---
   const addField = (type) => {
@@ -46,11 +48,13 @@ export default function CreateFormPage() {
 
   // --- Save Form ---
   const saveForm = async () => {
+    if (!title.trim()) {
+      setErrors({ title: "Form title is required" });
+      return;
+    }
+
     setSaving(true);
     setErrors({});
-
-    const payload = { title, fields };
-    console.log('Sending form data:', payload);
 
     try {
       const res = await fetch("http://localhost:8000/api/forms", {
@@ -59,27 +63,29 @@ export default function CreateFormPage() {
           "Content-Type": "application/json",
           "Accept": "application/json"
         },
-        mode: "cors",
-        credentials: "omit",
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ 
+          title, 
+          fields: fields.map((field, index) => ({
+            ...field,
+            order: index
+          }))
+        }),
       });
 
-      // Parse JSON safely
-      let data;
-      const contentType = res.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        data = await res.json();
-      } else {
-        const text = await res.text();
-        throw new Error(`Server returned non-JSON response:\n${text.substring(0, 200)}...`);
-      }
-
+      const data = await res.json();
+      
       if (!res.ok) {
         // Handle validation errors
-        if (data.errors) setErrors(data.errors);
-        else alert(data.message || "Failed to save form");
+        if (data.errors) {
+          setErrors(data.errors);
+        } else {
+          throw new Error(data.message || 'Failed to save form');
+        }
         return;
       }
+      
+      // Success - navigate to forms list
+      navigate('/forms');
 
       // Success
       alert("Form saved successfully!");
@@ -99,7 +105,11 @@ export default function CreateFormPage() {
         <header className="page-header flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold">Create Form</h1>
           <div className="flex gap-2">
-            <button className="button" disabled={saving} onClick={() => { setTitle(""); setFields([]); setErrors({}); }}>
+            <button 
+              className="button" 
+              disabled={saving} 
+              onClick={() => navigate("/forms")}
+            >
               Cancel
             </button>
             <button className="button primary" onClick={saveForm} disabled={saving}>

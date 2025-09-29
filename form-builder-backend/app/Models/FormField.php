@@ -6,7 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class FormField extends Model
 {
-    protected $fillable = ['form_id', 'type', 'label', 'required', 'options', 'order'];
+    protected $fillable = [
+        'form_id',
+        'type',
+        'label',
+        'required',
+        'options',
+        'order'
+    ];
 
     protected $casts = [
         'required' => 'boolean',

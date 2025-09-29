@@ -14,7 +14,7 @@ export default function Sidebar() {
   const menuItems = [
     { name: "Dashboard", path: "", icon: <FaHome /> },
     { name: "Forms", path: "/forms", icon: <FaWpforms /> },
-    { name: "Form Builder", path: "/create-forms", icon: <FaPlus /> },
+    { name: "Form Builder", path: "/forms/create", icon: <FaPlus /> },
     { name: "Submissions", path: "/submissions", icon: <FaChartBar /> },
     { name: "Preview", path: "/preview", icon: <FaEye /> },
     { name: "Settings", path: "/settings", icon: <FaCog /> },
