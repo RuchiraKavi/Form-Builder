@@ -189,7 +189,6 @@ export default function EditFormPage() {
       }
 
       alert("Form updated successfully!");
-      navigate("/forms");
     } catch (err) {
       setError(err.message);
       alert("Error: " + err.message);
@@ -253,7 +252,8 @@ export default function EditFormPage() {
                 onUpdate={updateField}
                 onDelete={deleteField}
                 onDuplicate={duplicateField}
-                onMove={moveField}
+                onMoveUp={() => moveField(field.id, "up")}
+                onMoveDown={() => moveField(field.id, "down")}
               />
             ))}
           </div>

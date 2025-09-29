@@ -49,6 +49,167 @@ body {
   border-radius: 4px;
 }
 
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  max-width: 700px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: #333;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #999;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-button:hover {
+  color: #333;
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px 24px;
+  border-top: 1px solid #eee;
+}
+
+.submission-meta {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.submission-meta h3 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 1.4em;
+}
+
+.submitted-at {
+  margin: 0;
+  color: #666;
+  font-size: 0.9em;
+}
+
+.submission-details h4 {
+  margin: 0 0 16px 0;
+  color: #333;
+}
+
+.response-detail {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border-left: 4px solid #007bff;
+}
+
+.field-label {
+  font-weight: 600;
+  color: #333;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.required {
+  color: #dc3545;
+  margin-left: 4px;
+}
+
+.response-value {
+  color: #555;
+  line-height: 1.5;
+}
+
+.checkbox-values {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.checkbox-values li {
+  padding: 4px 0;
+  color: #28a745;
+}
+
+.radio-value {
+  color: #007bff;
+  font-weight: 500;
+}
+
+.textarea-value {
+  background: white;
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  white-space: pre-wrap;
+  font-family: inherit;
+}
+
+.no-response {
+  color: #999;
+  font-style: italic;
+}
+
+/* Submission Actions */
+.submission-actions {
+  padding: 12px 16px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.more-fields {
+  color: #666;
+  font-style: italic;
+  margin-top: 8px;
+  font-size: 0.9em;
+}
+
 .title-input {
   font-size: 1.2rem;
   font-weight: bold;

@@ -84,13 +84,9 @@ export default function CreateFormPage() {
         return;
       }
       
-      // Success - navigate to forms list
-      navigate('/forms');
-
       // Success
       alert("Form saved successfully!");
-      setTitle("");
-      setFields([]);
+      navigate('/forms');
     } catch (err) {
       alert("Error: " + err.message);
     } finally {

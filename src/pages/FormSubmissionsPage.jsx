@@ -6,15 +6,24 @@ export default function FormSubmissionsPage() {
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedSubmission, setSelectedSubmission] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchSubmissions();
   }, []);
 
-  const handleFormClick = (formId) => {
-    navigate(`/forms/${formId}`);
+  const handleSubmissionClick = (submission) => {
+    setSelectedSubmission(submission);
+    setShowModal(true);
   };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedSubmission(null);
+  };
+
 
   const fetchSubmissions = async () => {
     try {
@@ -74,11 +83,10 @@ export default function FormSubmissionsPage() {
           </div>
         ) : (
           <div className="submissions-list">
-            {submissions.map((submission) => (
-              <div 
-                key={submission.id} 
+            {submissions.filter(submission => submission?.form?.fields).map((submission) => (
+              <div
+                key={submission.id}
                 className="submission-card"
-                onClick={() => handleFormClick(submission.form_id)}
                 style={{ cursor: 'pointer' }}
               >
                 <div className="submission-header">
@@ -88,24 +96,109 @@ export default function FormSubmissionsPage() {
                   </span>
                 </div>
                 <div className="submission-content">
-                  {submission.form.fields.map((field) => {
-                    const value = submission.responses[field.id];
-                    if (value === undefined) return null;
-                    
-                    return (
-                      <div key={field.id} className="response-item">
-                        <strong>{field.label}:</strong>
-                        <span>
-                          {field.type === 'checkbox' || field.type === 'radio'
-                            ? (Array.isArray(value) ? value.join(", ") : value)
-                            : value || '-'}
-                        </span>
-                      </div>
-                    );
-                  })}
+                  {submission.form.fields
+                    ?.sort((a, b) => (a.order || 0) - (b.order || 0))
+                    .slice(0, 2)
+                    .map((field) => {
+                      const value = submission.responses?.[field.id];
+                      if (value === undefined || value === null || value === '') return null;
+
+                      return (
+                        <div key={field.id} className="response-item">
+                          <strong>{field.label}:</strong>
+                          <span>
+                            {field.type === 'checkbox' || field.type === 'radio'
+                              ? (Array.isArray(value) ? value.join(", ") : value)
+                              : value || '-'}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  {(submission.form.fields?.length || 0) > 2 && (
+                    <div className="more-fields">
+                      +{(submission.form.fields?.length || 0) - 2} more fields
+                    </div>
+                  )}
+                </div>
+                <div className="submission-actions">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSubmissionClick(submission);
+                    }}
+                    className="button primary"
+                  >
+                    View Submission
+                  </button>
                 </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* Modal for full submission details */}
+        {showModal && selectedSubmission && (
+          <div className="modal-overlay" onClick={closeModal}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <h2>Form Submission Details</h2>
+                <button onClick={closeModal} className="close-button">×</button>
+              </div>
+
+              <div className="modal-body">
+                <div className="submission-meta">
+                  <h3>{selectedSubmission.form.title}</h3>
+                  <p className="submitted-at">
+                    Submitted on: {new Date(selectedSubmission.created_at).toLocaleString()}
+                  </p>
+                </div>
+
+                <div className="submission-details">
+                  <h4>Submitted Responses:</h4>
+                  {selectedSubmission.form.fields
+                    ?.sort((a, b) => (a.order || 0) - (b.order || 0))
+                    .map((field) => {
+                      const value = selectedSubmission.responses?.[field.id];
+
+                      return (
+                        <div key={field.id} className="response-detail">
+                          <label className="field-label">
+                            {field.label}
+                            {field.required && <span className="required">*</span>}
+                          </label>
+                          <div className="response-value">
+                            {value !== undefined && value !== null && value !== '' ? (
+                              field.type === 'checkbox' ? (
+                                Array.isArray(value) ? (
+                                  <ul className="checkbox-values">
+                                    {value.map((item, index) => (
+                                      <li key={index}>✓ {item}</li>
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  <span>✓ {value}</span>
+                                )
+                              ) : field.type === 'radio' ? (
+                                <span className="radio-value">● {value}</span>
+                              ) : field.type === 'textarea' ? (
+                                <div className="textarea-value">{value}</div>
+                              ) : (
+                                <span>{value}</span>
+                              )
+                            ) : (
+                              <span className="no-response">No response</span>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    }) || []}
+                </div>
+              </div>
+
+              <div className="modal-footer">
+                <button onClick={closeModal} className="button primary">Close</button>
+              </div>
+            </div>
           </div>
         )}
       </main>
