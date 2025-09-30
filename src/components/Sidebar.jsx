@@ -12,11 +12,11 @@ export default function Sidebar() {
   }, [pathname]);
 
   const menuItems = [
-    { name: "Dashboard", path: "", icon: <FaHome /> },
+    { name: "Dashboard", path: "/", icon: <FaHome /> },
     { name: "Forms", path: "/forms", icon: <FaWpforms /> },
     { name: "Form Builder", path: "/forms/create", icon: <FaPlus /> },
     { name: "Submissions", path: "/submissions", icon: <FaChartBar /> },
-    { name: "Preview", path: "/preview", icon: <FaEye /> },
+    { name: "Preview", path: "/", icon: <FaEye /> },
     { name: "Settings", path: "/settings", icon: <FaCog /> },
   ];
 
